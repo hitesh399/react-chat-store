@@ -1,0 +1,43 @@
+{
+  "name": "react-chat-store",
+  "version": "0.0.1",
+  "description": "React Chat Manager",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c --environment INCLUDE_DEPS,BUILD:production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hitesh399/react-chat-store.git"
+  },
+  "keywords": [
+    "React",
+    "chat",
+    "react",
+    "chat",
+    "widgets"
+  ],
+  "author": "hitesh <live2hitesh@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hitesh399/react-chat-store/issues"
+  },
+  "homepage": "https://github.com/hitesh399/react-chat-store#readme",
+  "dependencies": {    
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-proptypes": "^1.0.0",
+    "webpack": "^4.41.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "rollup": "^1.27.13",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}
