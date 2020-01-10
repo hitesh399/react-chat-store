@@ -10,6 +10,8 @@ import {
 	MAKE_GAP_FROM_RIGHT,
 	MAKE_COLLAPSE_CHAT_BOX,
 	MAKE_EXPAND_CHAT_BOX,
+	ENABLE_MOBILE,
+	DISABLE_MOBILE
 } from '../actions/MessageBoxAction';
 
 
@@ -66,7 +68,8 @@ let defaultStructure = {
 	onlineUsers: [], // To Contains list of online users
 	chatList: [], // To COntains the list of Chat 
 	histories: {}, // To Contains the list of message history separate by [chat id] like: { chat_{id}: [] }
-	chatCount: {}
+	chatCount: {},
+	isMobile: false
 
 }
 
@@ -118,14 +121,20 @@ const chatOnlineUserActions = [
 ]
 export const chatReducer = (state, action) => {
 
-	if (![...chatBoxActions, ...chatHistoryActions, ...chatListActions, ...ChatCountActions, ...chatOnlineUserActions].includes(action.type)) {
+	if (![ENABLE_MOBILE, DISABLE_MOBILE, ...chatBoxActions, ...chatHistoryActions, ...chatListActions, ...ChatCountActions, ...chatOnlineUserActions].includes(action.type)) {
 		return state ? state : defaultStructure
 	}
 
 	/**
 	 * When A chat box related action has been dispatched.
 	 */
-	if (chatBoxActions.includes(action.type)) {
+	if (action.type === ENABLE_MOBILE) {
+	 	state.isMobile = true
+	 	return {...state}
+	} else if (action.type === DISABLE_MOBILE) {
+		state.isMobile = false
+		return {...state}
+	} else if (chatBoxActions.includes(action.type)) {
 		return chatBoxManager(state, action)
 	} else if (chatHistoryActions.includes(action.type)) {
 		return chathistoryManager(state, action)

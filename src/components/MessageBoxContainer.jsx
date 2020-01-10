@@ -12,7 +12,9 @@ import {
 	openChatBox,
 	makeDim,
 	makeHighlight,
-	deactiveChatBoxes	
+	deactiveChatBoxes,
+	enableOnMobile,
+	disableOnMobile
 } from '../actions/MessageBoxAction'
 
 import {unread} from '../actions/ChatCountAction'
@@ -22,13 +24,14 @@ const margin = config.getMargin()
 const height = config.getHeight()
 const width = config.getBoxWith()
 
-function mapStateToProps(state) {
+export function mapStateToProps(state) {
 
 	return {
 		chatBoxes: state.chat ? state.chat.items : [],
 		histories: state.chat ? state.chat.histories : {},
 		chatCount: state.chat ? state.chat.chatCount : {},
 		onlineUsers: state.chat ? state.chat.onlineUsers : [],
+		isMobile: state.chat ? state.chat.isMobile : false
 	}
 }
 
@@ -87,21 +90,33 @@ export class MessageBoxContainer extends React.Component {
 		const {
 			chatBoxes
 		} = this.props
-		const container = config.getContainer()
-		const requiredWithOpenBox = (config.getBoxWith() + config.getMargin()) * 2;
+		
+		const deviceWidth = window.innerWidth
+		if (deviceWidth  > config.getMobileMinWidth()) {
 
-		if (container.innerWidth < requiredWithOpenBox) {
-			this.props.dispatch(deactiveChatBoxes())
-			return
+			if (this.props.isMobile) {
+				this.props.dispatch(disableOnMobile())
+			}
+
+			const container = config.getContainer()
+			const requiredWithOpenBox = (config.getBoxWith() + config.getMargin()) * 2;
+
+			if (container.innerWidth < requiredWithOpenBox) {
+				this.props.dispatch(deactiveChatBoxes())
+				return
+			}
+
+			this.props.dispatch(deleteAllChatBox())
+			chatBoxes.sort(function(a, b) {
+				return a.order > b.order
+			})
+			chatBoxes.forEach(item => {
+				this.props.dispatch(openChatBox(item))
+			})
+		} else if(!this.props.isMobile) {
+			// Now Is a Mobile Screeen
+			this.props.dispatch(enableOnMobile())
 		}
-
-		this.props.dispatch(deleteAllChatBox())
-		chatBoxes.sort(function(a, b) {
-			return a.order > b.order
-		})
-		chatBoxes.forEach(item => {
-			this.props.dispatch(openChatBox(item))
-		})
 	}
 	isUserOnline(user_id) {
 		return this.props.onlineUsers
@@ -109,6 +124,10 @@ export class MessageBoxContainer extends React.Component {
 	}
 	componentDidMount() {
 		window.addEventListener('resize', this.whenWindowResize)
+		const deviceWidth = window.innerWidth
+		if (deviceWidth  <= config.getMobileMinWidth() && !this.props.isMobile) {
+			this.props.dispatch(enableOnMobile())
+		}
 	}
 	componentWillUnmount() {
 		window.removeEventListener('resize', this.whenWindowResize)
@@ -121,6 +140,9 @@ export class MessageBoxContainer extends React.Component {
 	}
 	
 	render() {
+		console.log('this.props.isMobile', this.props.isMobile)
+		if (this.props.isMobile) return null
+
 		const boxes = this.getActiveBoxes()
 		return React.createElement(
 			'div', {
@@ -144,7 +166,7 @@ export class MessageBoxContainer extends React.Component {
 
 				return React.createElement(
 					'div', {
-						key: 'chat_box' + config.getChatListId(item), //
+						key: `chat_box_${config.getChatListId(item)}`, //
 						className: `chat-message-box ${item.highlight ? 'highlight' : ''}`,
 						style: this.getStyle(item)
 					}, [
@@ -152,7 +174,7 @@ export class MessageBoxContainer extends React.Component {
 							this.props.itemConponent, {
 								item,
 								index,
-								key: 'chat_box_inner' + config.getChatListId(item),
+								// key: `chat_box_inner${config.getChatListId(item)}`,
 								deleteFnc: () => this.remove(item),
 								makeDim: () => this.makeDim(item),
 								makeHighlight: () => this.makeHighlight(item),

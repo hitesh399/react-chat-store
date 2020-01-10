@@ -9,9 +9,34 @@ export const MAKE_INACTIVE_ALL_CHAT_BOX = 'MAKE_INACTIVE_ALL_CHAT_BOX';
 export const MAKE_GAP_FROM_RIGHT = 'MAKE_GAP_FROM_RIGHT';
 export const MAKE_COLLAPSE_CHAT_BOX = 'MAKE_COLLAPSE_CHAT_BOX';
 export const MAKE_EXPAND_CHAT_BOX = 'MAKE_EXPAND_CHAT_BOX';
+export const ENABLE_MOBILE = 'ENABLE_MOBILE';
+export const DISABLE_MOBILE = 'DISABLE_MOBILE';
 
 import config from '../config'
 
+export const enableOnMobile = () => {
+		
+	return function(dispatch, getState) {
+		dispatch({
+			type: ENABLE_MOBILE,
+			payload: {}
+		})
+		const items = getState().chat.items
+		const other_active_chat_boxes =  items.filter(i  => i.status === 'active' )
+		other_active_chat_boxes.forEach((item, index) => {
+			if (index > 0 ) {
+				const _chat_list_id = config.getChatListId(item)
+				dispatch(deactiveChatBox(_chat_list_id))
+			}
+		})
+	}
+}
+export const disableOnMobile = () => {
+	return {
+		type: DISABLE_MOBILE,
+		payload: {}
+	}
+}
 
 export const openChatBox = (item) => {
 
@@ -20,12 +45,18 @@ export const openChatBox = (item) => {
 	
 	return function(dispatch, getState) {
 		const items = getState().chat.items
+		const isMobile = getState().isMobile
 
 		const hasItem = items.filter(i  => _chat_list_id === i[_chat_list_id_key])
+		const other_active_chat_boxes =  items.filter(i  => _chat_list_id != i[_chat_list_id_key] && i.status === 'active' )
 
+		if (isMobile) {			
+			other_active_chat_boxes.forEach((other_actove_box) => {
+				dispatch(deactiveChatBox(other_actove_box[_chat_list_id_key]))
+			})
+		}
 		if (hasItem.length) {
-			// console.log(hasItem[0], 'Testskdhskjd')
-			if (hasItem[0].status === 'inactive') {
+			if (hasItem[0].status === 'inactive' && ( !isMobile || other_active_chat_boxes.length === 0)) {
 				dispatch(activeChatBox(hasItem[0][_chat_list_id_key]))	
 			}
 

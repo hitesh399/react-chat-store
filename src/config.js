@@ -9,7 +9,8 @@ class config {
             chatListIdentifiers: ['connected_user_id'],
             loginUserId: null,
             historyUniqueId: 'id',
-            readAtKey: 'read_at'
+            readAtKey: 'read_at',
+            mobileMinWidth: 600
         }
     }
     init(options = {}) {
@@ -18,8 +19,11 @@ class config {
             ...options
         }
     }
+    getMobileMinWidth() {
+        return this.options.mobileMinWidth
+    }
     getReadAtKey() {
-        this.options.readAtKey
+        return this.options.readAtKey
     }
     getContainer() {
         return window
