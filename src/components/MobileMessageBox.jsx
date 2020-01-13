@@ -2,6 +2,8 @@ import {MessageBoxContainer, mapStateToProps} from './MessageBoxContainer.jsx'
 import {
 	connect
 } from 'react-redux';
+import React from 'react';
+import config from '../config'
 
 export class MobileMessageBox extends MessageBoxContainer {
 	constructor(props) {
@@ -10,7 +12,7 @@ export class MobileMessageBox extends MessageBoxContainer {
 	render() {
 		if (!this.props.isMobile) return null
 		const boxes = this.getActiveBoxes()
-		if (!boxes.length) return
+		if (!boxes.length) return null
 
 		const item = boxes[0]
 		let histories = this.props.histories[`history_of_${config.getChatListId(item)}`]
@@ -24,19 +26,19 @@ export class MobileMessageBox extends MessageBoxContainer {
 			'div', {
 				key: 'mobile_chat_box' + config.getChatListId(item), //
 				className: `mobile-chat-message-box ${item.highlight ? 'highlight' : ''}`,
-				style: this.getStyle(item)
 			}, [
 				React.createElement(
 					this.props.itemConponent, 
 					{
 						item,
-						index,
 						key: 'chat_box_inner' + config.getChatListId(item),
+						deleteFnc: () => this.remove(item),
 						makeDim: () => this.makeDim(item),
 						makeHighlight: () => this.makeHighlight(item),
 						histories,
 						unread,
 						typing,
+						dispatch: this.props.dispatch,
 						newMessage: (message) => this.newMessage(item, message),
 						addHistories: (messages) => this.addHistories(item, messages),
 						setUnreadMessage: (total) => this.setUnreadMessage(item, total),

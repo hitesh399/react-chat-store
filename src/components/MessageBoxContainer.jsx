@@ -99,7 +99,7 @@ export class MessageBoxContainer extends React.Component {
 			}
 
 			const container = config.getContainer()
-			const requiredWithOpenBox = (config.getBoxWith() + config.getMargin()) * 2;
+			const requiredWithOpenBox = (config.getBoxWith() + config.getMargin());
 
 			if (container.innerWidth < requiredWithOpenBox) {
 				this.props.dispatch(deactiveChatBoxes())
@@ -140,7 +140,6 @@ export class MessageBoxContainer extends React.Component {
 	}
 	
 	render() {
-		console.log('this.props.isMobile', this.props.isMobile)
 		if (this.props.isMobile) return null
 
 		const boxes = this.getActiveBoxes()
@@ -183,6 +182,7 @@ export class MessageBoxContainer extends React.Component {
 								histories,
 								unread,
 								typing,
+								dispatch: this.props.dispatch,
 								newMessage: (message) => this.newMessage(item, message),
 								addHistories: (messages) => this.addHistories(item, messages),
 								setUnreadMessage: (total) => this.setUnreadMessage(item, total),
