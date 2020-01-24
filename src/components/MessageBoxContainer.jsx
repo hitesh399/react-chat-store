@@ -67,6 +67,9 @@ export class MessageBoxContainer extends React.Component {
 	remove(item) {
 		this.props.dispatch(deleteChatBox(config.getChatListId(item)))
 	}
+	removeAll() {
+		this.props.dispatch(deleteAllChatBox())
+	}
 	collapse(item) {
 		this.props.dispatch(chatBoxCollapse(config.getChatListId(item)))
 	}
@@ -175,6 +178,7 @@ export class MessageBoxContainer extends React.Component {
 								index,
 								// key: `chat_box_inner${config.getChatListId(item)}`,
 								deleteFnc: () => this.remove(item),
+								deleteAll: () => this.removeAll(item),
 								makeDim: () => this.makeDim(item),
 								makeHighlight: () => this.makeHighlight(item),
 								collapse: () => this.collapse(item),

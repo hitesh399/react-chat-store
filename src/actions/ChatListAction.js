@@ -3,6 +3,7 @@ export const CHAT_NEW_CHATLIST = 'CHAT_NEW_CHATLIST';
 export const CHAT_DELETE_CHATLIST = 'CHAT_DELETE_CHATLIST';
 export const CHAT_UPDATE_CHAT_LIST = 'CHAT_UPDATE_CHAT_LIST';
 export const CHAT_PUSH_CHATLIST = 'CHAT_PUSH_CHATLIST';
+export const CHAT_ADD_CHATLIST = 'CHAT_ADD_CHATLIST';
 export const CHAT_UNSHIFT_CHATLIST = 'CHAT_UNSHIFT_CHATLIST';
 export const CHAT_UPDATE_CHAT_LIST_DYNAMICALLY = 'CHAT_UPDATE_CHAT_LIST_DYNAMICALLY';
 
@@ -42,6 +43,14 @@ export function updateChatList(chat_list) {
 		type: CHAT_UPDATE_CHAT_LIST,
 		payload: {
 			chat_list
+		}
+	}
+}
+export function addChatList(chat_lists) {
+	return {
+		type: CHAT_ADD_CHATLIST,
+		payload: {
+			chat_lists
 		}
 	}
 }

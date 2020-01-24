@@ -21,7 +21,8 @@ import {
 	CHAT_UPDATE_CHAT_LIST,
 	CHAT_PUSH_CHATLIST,
 	CHAT_UNSHIFT_CHATLIST,
-	CHAT_UPDATE_CHAT_LIST_DYNAMICALLY
+	CHAT_UPDATE_CHAT_LIST_DYNAMICALLY,
+	CHAT_ADD_CHATLIST
 } from '../actions/ChatListAction'
 
 import {
@@ -104,7 +105,8 @@ const chatListActions = [
 	CHAT_UPDATE_CHAT_LIST,
 	CHAT_PUSH_CHATLIST,
 	CHAT_UNSHIFT_CHATLIST,
-	CHAT_UPDATE_CHAT_LIST_DYNAMICALLY
+	CHAT_UPDATE_CHAT_LIST_DYNAMICALLY,
+	CHAT_ADD_CHATLIST
 ]
 
 const ChatCountActions = [
@@ -427,6 +429,11 @@ function chatListManager(state, action) {
 			return {
 				...state,
 				chatList: state.chatList.slice()
+			}
+		case CHAT_ADD_CHATLIST:
+			return {
+				...state,
+				chatList: chat_lists.slice()
 			}
 		case CHAT_DELETE_CHATLIST:
 			let _index = null

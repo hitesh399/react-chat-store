@@ -35,6 +35,7 @@ export class MobileMessageBox extends MessageBoxContainer {
 						deleteFnc: () => this.remove(item),
 						makeDim: () => this.makeDim(item),
 						makeHighlight: () => this.makeHighlight(item),
+						deleteAll: () => this.removeAll(item),
 						histories,
 						unread,
 						typing,
