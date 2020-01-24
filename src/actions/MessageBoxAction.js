@@ -54,6 +54,8 @@ export const openChatBox = (item, force_open = true) => {
 			return 
 		}
 
+		const should_active = (hasItem.length && hasItem[0].status === 'inactive' && ( !isMobile || other_active_chat_boxes.length === 0))
+
 		if (isMobile) {			
 			other_active_chat_boxes.forEach((other_actove_box) => {
 				dispatch(deactiveChatBox(other_actove_box[_chat_list_id_key]))
@@ -61,10 +63,8 @@ export const openChatBox = (item, force_open = true) => {
 		}
 
 
-		if (hasItem.length) {
-			if (hasItem[0].status === 'inactive' && ( !isMobile || other_active_chat_boxes.length === 0)) {
-				dispatch(activeChatBox(hasItem[0][_chat_list_id_key]))	
-			}
+		if (should_active) {
+			dispatch(activeChatBox(hasItem[0][_chat_list_id_key]))
 
 		} else {
 
