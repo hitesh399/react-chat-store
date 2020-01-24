@@ -38,23 +38,29 @@ export const disableOnMobile = () => {
 	}
 }
 
-export const openChatBox = (item) => {
+export const openChatBox = (item, force_open = true) => {
 
 	const _chat_list_id = config.getChatListId(item)
 	const _chat_list_id_key = config.getChatListKeyName(item)
 	
 	return function(dispatch, getState) {
 		const items = getState().chat.items
-		const isMobile = getState().isMobile
+		const isMobile = getState().chat.isMobile
 
 		const hasItem = items.filter(i  => _chat_list_id === i[_chat_list_id_key])
 		const other_active_chat_boxes =  items.filter(i  => _chat_list_id != i[_chat_list_id_key] && i.status === 'active' )
+
+		if (isMobile && other_active_chat_boxes.length && force_open === false) {
+			return 
+		}
 
 		if (isMobile) {			
 			other_active_chat_boxes.forEach((other_actove_box) => {
 				dispatch(deactiveChatBox(other_actove_box[_chat_list_id_key]))
 			})
 		}
+
+
 		if (hasItem.length) {
 			if (hasItem[0].status === 'inactive' && ( !isMobile || other_active_chat_boxes.length === 0)) {
 				dispatch(activeChatBox(hasItem[0][_chat_list_id_key]))	
